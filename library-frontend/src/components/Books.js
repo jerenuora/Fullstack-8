@@ -25,7 +25,7 @@ const Books = ({ show }) => {
             <th>published</th>
           </tr>
           {booksToShow.map((a) => (
-            <tr key={a.title}>
+            <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author}</td>
               <td>{a.published}</td>
