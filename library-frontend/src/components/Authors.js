@@ -1,13 +1,19 @@
+import { useQuery } from '@apollo/client'
+import { ALL_AUTHORS } from '../queries'
+const Authors = ({ show }) => {
+  const authors = useQuery(ALL_AUTHORS)
 
-const Authors = ({ show, authors }) => {
   if (!show) {
     return null
   }
+
   console.log(authors)
 
-  if (!authors)  {
+  if (authors.loading)  {
     return <div>loading...</div>
   }
+  
+  const authorsToShow = authors.data.allAuthors
 
   return (
     <div>
@@ -19,7 +25,7 @@ const Authors = ({ show, authors }) => {
             <th>born</th>
             <th>books</th>
           </tr>
-          {authors.map((a) => (
+          {authorsToShow.map((a) => (
             <tr key={a.name}>
               <td>{a.name}</td>
               <td>{a.born}</td>

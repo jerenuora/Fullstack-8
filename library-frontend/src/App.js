@@ -2,14 +2,9 @@ import { useState } from 'react'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
-import { ALL_AUTHORS, ALL_BOOKS } from './queries' 
-import { useQuery } from '@apollo/client'
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  const authors = useQuery(ALL_AUTHORS)
-  const books = useQuery(ALL_BOOKS)
-  console.log(books)
 
   return (
     <div>
@@ -19,9 +14,9 @@ const App = () => {
         <button onClick={() => setPage('add')}>add book</button>
       </div>
 
-      <Authors show={page === 'authors'} authors={authors.data.allAuthors} />
+      <Authors show={page === 'authors'}  />
 
-      <Books show={page === 'books'} books={books.data.allBooks} />
+      <Books show={page === 'books'} />
 
       <NewBook show={page === 'add'} />
     </div>
