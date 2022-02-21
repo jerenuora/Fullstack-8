@@ -131,7 +131,9 @@ const resolvers = {
     allBooks: (root, args) => {
       const filterGenre = (books) => books.filter((b) => b.genres.includes(args.genre))
       const filterAuthor = (books) => books.filter((b) => b.author === args.author)
-      if (!args.genre) {
+      if (!args.author && !args.genre){
+        return books
+      } else if (!args.genre) {
         return filterAuthor(books)
       } else if (!args.author) {
         return filterGenre(books)
