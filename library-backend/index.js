@@ -1,10 +1,11 @@
 const { ApolloServer, gql } = require('apollo-server')
 const mongoose = require('mongoose')
+require('dotenv').config()
 const { v1: uuid } = require('uuid')
 const Author = require('./models/author')
 const Book = require('./models/book')
 
-const MONGODB_URI = 'mongodb+srv://jere:jere@cluster0.ozptw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const MONGODB_URI = process.env.MONGODB_URI
 
 console.log('connecting to', MONGODB_URI)
 
