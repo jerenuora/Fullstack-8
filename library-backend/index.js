@@ -98,7 +98,17 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser
     }
-  
+  },
+  Author: {
+    name: async (root, args) => {
+      console.log(root._id)
+      const author = await Author.findById(root._id)
+      return author.name
+    },
+    bookCount: async (root, args) =>  {
+      const books = await Book.find({author: root._id})
+      return books.length
+    }
   },
   Mutation: {
     addBook: async (root, args, context) => {
@@ -108,18 +118,17 @@ const resolvers = {
           throw new AuthenticationError('Not Authorized')
         }
         if (!author){
-          const newAuthor = new Author({ name: args.author, id: uuid() })
+          const newAuthor = new Author({ name: args.author })
           try {
 
-            await newAuthor.save()
+            author = await newAuthor.save()
           } catch(error) {
             throw new UserInputError(error.message, {
               invalidArgs: args,
             })
           }
         }
-        author = await Author.findOne({ name: args.author })
-        const book = new Book({ ...args, author: author._id, id: uuid() })
+        const book = new Book({ ...args, author: author})
         try {
         await book.save()
         } catch(error) {
@@ -127,7 +136,6 @@ const resolvers = {
               invalidArgs: args,
             })
           }
-
         return book
     },
     editAuthor: async (root, args, context) => {
