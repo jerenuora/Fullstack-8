@@ -1,5 +1,6 @@
 const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server')
 const mongoose = require('mongoose')
+
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
 const { v1: uuid } = require('uuid')
@@ -101,7 +102,6 @@ const resolvers = {
   },
   Author: {
     name: async (root, args) => {
-      console.log(root._id)
       const author = await Author.findById(root._id)
       return author.name
     },
