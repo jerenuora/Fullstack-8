@@ -59,3 +59,11 @@ mutation($username: String!, $password: String!) {
   }
 }
 `
+
+export const MY_FAVORITE_GENRE = gql `
+query {
+  me {
+    favoriteGenre
+  }
+}
+`
