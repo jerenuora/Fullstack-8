@@ -4,8 +4,8 @@ import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
 import Recommendations from './components/Recommendations'
-import { useQuery, useMutation, useSubscription, useApolloClient } from '@apollo/client'
-import { BOOK_ADDED } from './queries'
+import {  useSubscription, useApolloClient } from '@apollo/client'
+import { ALL_BOOKS_OF_GENRE, BOOK_ADDED } from './queries'
 
 const App = () => {
   const [page, setPage] = useState('authors')
@@ -14,8 +14,14 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       console.log(subscriptionData)
-      const message = `A new book: "${subscriptionData.data.bookAdded.title}" by: ${subscriptionData.data.bookAdded.author.name} has arrived `
+      const addedBook = subscriptionData.data.bookAdded
+      const message = `A new book: "${addedBook.title}" by: ${addedBook.author.name} has arrived `
       window.alert(message)
+      client.cache.updateQuery({ query: ALL_BOOKS_OF_GENRE, variables: { genreToFind: "" } }, ({ allBooks }) => {
+        return {
+          allBooks: allBooks.concat(addedBook),
+        }
+      })      
     }
   })
   
