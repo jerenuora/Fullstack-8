@@ -67,3 +67,18 @@ query {
   }
 }
 `
+
+export const ALL_BOOKS_OF_GENRE = gql `
+query allBooksByGenre($genreToFind: String!) {
+  allBooks(genre:$genreToFind) {
+    title
+    author {
+      name
+    }
+    published
+    genres
+    id
+
+  }
+}
+`

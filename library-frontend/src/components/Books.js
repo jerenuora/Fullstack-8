@@ -1,37 +1,34 @@
-import { ALL_BOOKS } from '../queries'
+import { ALL_BOOKS, ALL_BOOKS_OF_GENRE } from '../queries'
 import { useQuery } from '@apollo/client'
 import { useState } from 'react'
 const Books = ({ show }) => {
   const books = useQuery(ALL_BOOKS)
-  const [genreToShow, setGenresToShow] = useState(null)
+  const [genreToFind, setGenresToShow] = useState('')
+
+  let booksByGenre = useQuery(ALL_BOOKS_OF_GENRE, {
+    variables: { genreToFind }
+  })
 
   if (!show) {
     return null
   }
-  if (books.loading) {
+  if (booksByGenre.loading) {
     return <div>loading...</div>
   }
 
-  const booksToShow = books.data.allBooks
   const genres = new Set(
-    booksToShow.reduce((list, book) => list.concat(book.genres), [])
+    books.data.allBooks.reduce((list, book) => list.concat(book.genres), [])
   )
   const genreButtons = [...genres].map((genre) => {
     return <button key={genre} onClick={() => setGenresToShow(genre)}>{genre}</button>
   })
 
-  console.log(genreToShow)
-  console.log(booksToShow)
-  let booksByGenre = booksToShow
 
-  if (genreToShow) {
-    booksByGenre = booksToShow.filter((book) =>
-      book.genres.includes(genreToShow) ? book : null
-    )
-  }
+  const booksToShow = booksByGenre.data.allBooks
+  
   return (
     <div>
-      <h2>books by genre {genreToShow}</h2>
+      <h2>books by genre {genreToFind}</h2>
       {genreButtons}
       <table>
         <tbody>
@@ -40,7 +37,7 @@ const Books = ({ show }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {booksByGenre.map((a) => (
+          {booksToShow.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
