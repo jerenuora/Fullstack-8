@@ -82,3 +82,17 @@ query allBooksByGenre($genreToFind: String!) {
   }
 }
 `
+
+export const BOOK_ADDED = gql `
+subscription BookAdded {
+  bookAdded {
+    title
+    author {
+      name
+    }
+    genres
+    published
+    id
+  }
+}
+`
